@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+<title>
+    Admin Login | Subhan Property
+</title>
+<style>
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+    }
+    .login-box {
+        width: 330px;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow:
+            0 5px 25px
+            rgba(0,0,0,0.12);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #17365d;
+    }
+    input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        background: #17365d;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0f2948;
+    }
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .forgot-password {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #17365d;
+        text-decoration: none;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .forgot-password:hover {
+        text-decoration: underline;
+    }
+    #errorMsg {
+        color: red;
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+    #successMsg {
+        color: green;
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+<div class="login-box">
+<h2>
+    Admin Login
+</h2>
+<form id="loginForm">
+    <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        required
+    >
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        required
+    >
+    <button
+        type="submit"
+        id="loginBtn"
+    >
+        Login
+    </button>
+    <a
+        href="#"
+        id="forgotPassword"
+        class="forgot-password"
+    >
+        Forgot Password?
+    </a>
+    <div id="errorMsg"></div>
+    <div id="successMsg"></div>
+</form>
+</div>
+<script type="module">
+import { supabase }
+    from '../supabase.js';
+const form =
+    document.getElementById(
+        'loginForm'
+    );
+const errorMsg =
+    document.getElementById(
+        'errorMsg'
+    );
+const successMsg =
+    document.getElementById(
+        'successMsg'
+    );
+const loginBtn =
+    document.getElementById(
+        'loginBtn'
+    );
+const forgotPassword =
+    document.getElementById(
+        'forgotPassword'
+    );
+form.addEventListener(
+    'submit',
+    async function(e) {
+        e.preventDefault();
+        errorMsg.textContent = '';
+        successMsg.textContent = '';
+        loginBtn.textContent =
+            'Please wait...';
+        loginBtn.disabled =
+            true;
+        const email =
+            document
+                .getElementById('email')
+                .value
+                .trim();
+        const password =
+            document
+                .getElementById('password')
+                .value;
+        try {
+            const { data, error } =
+                await supabase.auth
+                    .signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+            if (error) {
+                errorMsg.textContent =
+                    error.message;
+                loginBtn.textContent =
+                    'Login';
+                loginBtn.disabled =
+                    false;
+                return;
+            }
+            if (data.session) {
+                window.location.href =
+                    'dashboard.html';
+            }
+        } catch (err) {
+            errorMsg.textContent =
+                'Connection error. Please try again.';
+            console.error(err);
+            loginBtn.textContent =
+                'Login';
+            loginBtn.disabled =
+                false;
+        }
+    }
+);
+forgotPassword.addEventListener(
+    'click',
+    async function(e) {
+        e.preventDefault();
+        errorMsg.textContent = '';
+        successMsg.textContent = '';
+        const email =
+            document
+                .getElementById('email')
+                .value
+                .trim();
+        if (!email) {
+            errorMsg.textContent =
+                'Please enter your email first.';
+            document
+                .getElementById('email')
+                .focus();
+            return;
+        }
+        forgotPassword.textContent =
+            'Sending...';
+        try {
+            const { error } =
+                await supabase.auth
+                    .resetPasswordForEmail(
+                        email,
+                        {
+                            redirectTo:
+                                window.location.origin
+                                + '/admin/reset-password.html'
+                        }
+                    );
+            if (error) {
+                errorMsg.textContent =
+                    error.message;
+                forgotPassword.textContent =
+                    'Forgot Password?';
+                return;
+            }
+            successMsg.textContent =
+                'Password reset email sent. Please check your email.';
+            forgotPassword.textContent =
+                'Forgot Password?';
+        } catch (err) {
+            console.error(err);
+            errorMsg.textContent =
+                'Connection error. Please try again.';
+            forgotPassword.textContent =
+                'Forgot Password?';
+        }
+    }
+);
+</script>
+</body>
+</html>

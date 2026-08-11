@@ -2,21 +2,36 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Add Property | Subhan Property</title>
 
-    <link rel="stylesheet" href="../style.css">
+    <link
+        rel="stylesheet"
+        href="../style.css"
+    >
+
 </head>
+
 
 <body>
 
+
 <header>
 
-    <h1>SUBHAN PROPERTY</h1>
+    <h1>
+        SUBHAN PROPERTY
+    </h1>
 
-    <p>Add New Property</p>
+    <p>
+        Add New Property
+    </p>
 
 </header>
 
@@ -38,17 +53,18 @@
 </nav>
 
 
+
 <section class="admin-dashboard">
+
 
     <h2>
         ➕ Add New Property
     </h2>
 
 
+
     <form id="propertyForm">
 
-
-        <!-- PROPERTY NAME -->
 
         <label>
             Property Name
@@ -62,7 +78,6 @@
         >
 
 
-        <!-- SIZE -->
 
         <label>
             Plot Size
@@ -76,7 +91,6 @@
         >
 
 
-        <!-- PRICE -->
 
         <label>
             Price
@@ -90,7 +104,6 @@
         >
 
 
-        <!-- LOCATION -->
 
         <label>
             Location
@@ -99,32 +112,46 @@
         <input
             type="text"
             id="propertyLocation"
-            placeholder="e.g. Khanpur Nawakot Chowk"
+            placeholder="e.g. Khanpur"
             required
         >
 
 
-        <!-- DESCRIPTION -->
 
         <label>
-            Property Description
+            Property Details
         </label>
 
         <textarea
-            id="propertyDescription"
+            id="propertyDetails"
             placeholder="Enter property details"
             required
         ></textarea>
 
 
-        <!-- BUTTON -->
 
-        <button type="submit">
+        <label>
+            Property Image
+        </label>
+
+        <input
+            type="file"
+            id="propertyImage"
+            accept="image/*"
+            required
+        >
+
+
+
+        <button
+            type="submit"
+        >
             Publish Property
         </button>
 
 
     </form>
+
 
 
     <p id="message"></p>
@@ -133,17 +160,150 @@
 </section>
 
 
+
 <script type="module">
 
-import { supabase } from "../supabase.js";
+
+import { supabase }
+    from "../supabase.js";
+
 
 
 const form =
-    document.getElementById("propertyForm");
+    document.getElementById(
+        "propertyForm"
+    );
 
 
 const message =
-    document.getElementById("message");
+    document.getElementById(
+        "message"
+    );
+
+
+
+function resizeImage(file) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+
+                    const image =
+                        new Image();
+
+
+                    image.onload =
+                        function() {
+
+
+                            const maxWidth = 800;
+
+
+                            let width =
+                                image.width;
+
+
+                            let height =
+                                image.height;
+
+
+
+                            if (
+                                width > maxWidth
+                            ) {
+
+                                height =
+                                    height *
+                                    (
+                                        maxWidth /
+                                        width
+                                    );
+
+                                width =
+                                    maxWidth;
+
+                            }
+
+
+
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
+
+
+                            canvas.width =
+                                width;
+
+
+                            canvas.height =
+                                height;
+
+
+
+                            const context =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+
+                            context.drawImage(
+                                image,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+
+                            const imageData =
+                                canvas.toDataURL(
+                                    "image/jpeg",
+                                    0.70
+                                );
+
+
+                            resolve(
+                                imageData
+                            );
+
+
+                        };
+
+
+                    image.onerror =
+                        reject;
+
+
+                    image.src =
+                        event.target.result;
+
+
+                };
+
+
+            reader.onerror =
+                reject;
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+
+        }
+    );
+
+}
 
 
 
@@ -155,102 +315,188 @@ form.addEventListener(
         event.preventDefault();
 
 
+
         message.textContent =
-            "Saving property...";
-
-
-        const title =
-            document.getElementById(
-                "propertyName"
-            ).value.trim();
-
-
-        const size =
-            document.getElementById(
-                "propertySize"
-            ).value.trim();
-
-
-        const price =
-            document.getElementById(
-                "propertyPrice"
-            ).value.trim();
-
-
-        const location =
-            document.getElementById(
-                "propertyLocation"
-            ).value.trim();
-
-
-        const description =
-            document.getElementById(
-                "propertyDescription"
-            ).value.trim();
+            "⏳ Property save ho rahi hai...";
 
 
 
-        const property = {
+        try {
 
-            title: title,
 
-            size: size,
-
-            price: price,
-
-            location: location,
-
-            description: description
-
-        };
+            const title =
+                document
+                    .getElementById(
+                        "propertyName"
+                    )
+                    .value
+                    .trim();
 
 
 
-        const { data, error } =
-            await supabase
-                .from("properties")
-                .insert([property])
-                .select();
+            const size =
+                document
+                    .getElementById(
+                        "propertySize"
+                    )
+                    .value
+                    .trim();
 
 
 
-        if (error) {
+            const price =
+                document
+                    .getElementById(
+                        "propertyPrice"
+                    )
+                    .value
+                    .trim();
+
+
+
+            const location =
+                document
+                    .getElementById(
+                        "propertyLocation"
+                    )
+                    .value
+                    .trim();
+
+
+
+            const detailsText =
+                document
+                    .getElementById(
+                        "propertyDetails"
+                    )
+                    .value
+                    .trim();
+
+
+
+            const imageFile =
+                document
+                    .getElementById(
+                        "propertyImage"
+                    )
+                    .files[0];
+
+
+
+            if (!imageFile) {
+
+                message.textContent =
+                    "❌ Property image select karein.";
+
+                return;
+
+            }
+
+
+
+            message.textContent =
+                "⏳ Image prepare ho rahi hai...";
+
+
+
+            const image =
+                await resizeImage(
+                    imageFile
+                );
+
+
+
+            const details = {
+
+                description:
+                    detailsText,
+
+                image:
+                    image
+
+            };
+
+
+
+            const { error } =
+                await supabase
+
+                    .from("properties")
+
+                    .insert([{
+
+                        title:
+                            title,
+
+                        size:
+                            size,
+
+                        price:
+                            price,
+
+                        location:
+                            location,
+
+                        details:
+                            JSON.stringify(
+                                details
+                            )
+
+                    }]);
+
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+
+                message.textContent =
+                    "❌ Property save nahi hui: "
+                    +
+                    error.message;
+
+                return;
+
+            }
+
+
+
+            message.textContent =
+                "✅ Property successfully added!";
+
+
+
+            form.reset();
+
+
+        }
+
+        catch (error) {
+
 
             console.error(
-                "Supabase Error:",
                 error
             );
 
 
             message.textContent =
-                "❌ Property save nahi hui: "
-                + error.message;
+                "❌ Error: "
+                +
+                error.message;
 
-
-            return;
 
         }
 
 
-
-        console.log(
-            "Property added:",
-            data
-        );
-
-
-        message.textContent =
-            "✅ Property successfully added!";
-
-
-        form.reset();
-
-
     }
-
 );
 
+
 </script>
+
 
 </body>
 
