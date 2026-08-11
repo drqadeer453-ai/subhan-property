@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Property | Subhan Property</title>
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<header>
+
+    <h1>SUBHAN PROPERTY</h1>
+
+    <p>Add New Property</p>
+
+</header>
+
+
+<nav>
+
+    <a href="dashboard.html">
+        Dashboard
+    </a>
+
+    <a href="add-property.html">
+        Add Property
+    </a>
+
+    <a href="../index.html">
+        View Website
+    </a>
+
+</nav>
+
+
+<section class="admin-dashboard">
+
+    <h2>
+        ➕ Add New Property
+    </h2>
+
+
+    <form id="propertyForm">
+
+
+        <!-- PROPERTY NAME -->
+
+        <label>
+            Property Name
+        </label>
+
+        <input
+            type="text"
+            id="propertyName"
+            placeholder="e.g. 5 Marla Plot"
+            required
+        >
+
+
+        <!-- SIZE -->
+
+        <label>
+            Plot Size
+        </label>
+
+        <input
+            type="text"
+            id="propertySize"
+            placeholder="e.g. 5 Marla"
+            required
+        >
+
+
+        <!-- PRICE -->
+
+        <label>
+            Price
+        </label>
+
+        <input
+            type="text"
+            id="propertyPrice"
+            placeholder="e.g. 25 Lac"
+            required
+        >
+
+
+        <!-- LOCATION -->
+
+        <label>
+            Location
+        </label>
+
+        <input
+            type="text"
+            id="propertyLocation"
+            placeholder="e.g. Khanpur Nawakot Chowk"
+            required
+        >
+
+
+        <!-- DESCRIPTION -->
+
+        <label>
+            Property Description
+        </label>
+
+        <textarea
+            id="propertyDescription"
+            placeholder="Enter property details"
+            required
+        ></textarea>
+
+
+        <!-- BUTTON -->
+
+        <button type="submit">
+            Publish Property
+        </button>
+
+
+    </form>
+
+
+    <p id="message"></p>
+
+
+</section>
+
+
+<script type="module">
+
+import { supabase } from "../supabase.js";
+
+
+const form =
+    document.getElementById("propertyForm");
+
+
+const message =
+    document.getElementById("message");
+
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+
+        event.preventDefault();
+
+
+        message.textContent =
+            "Saving property...";
+
+
+        const title =
+            document.getElementById(
+                "propertyName"
+            ).value.trim();
+
+
+        const size =
+            document.getElementById(
+                "propertySize"
+            ).value.trim();
+
+
+        const price =
+            document.getElementById(
+                "propertyPrice"
+            ).value.trim();
+
+
+        const location =
+            document.getElementById(
+                "propertyLocation"
+            ).value.trim();
+
+
+        const description =
+            document.getElementById(
+                "propertyDescription"
+            ).value.trim();
+
+
+
+        const property = {
+
+            title: title,
+
+            size: size,
+
+            price: price,
+
+            location: location,
+
+            description: description
+
+        };
+
+
+
+        const { data, error } =
+            await supabase
+                .from("properties")
+                .insert([property])
+                .select();
+
+
+
+        if (error) {
+
+            console.error(
+                "Supabase Error:",
+                error
+            );
+
+
+            message.textContent =
+                "❌ Property save nahi hui: "
+                + error.message;
+
+
+            return;
+
+        }
+
+
+
+        console.log(
+            "Property added:",
+            data
+        );
+
+
+        message.textContent =
+            "✅ Property successfully added!";
+
+
+        form.reset();
+
+
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>

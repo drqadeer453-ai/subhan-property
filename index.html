@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subhan Property | Khanpur</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="navbar">
+<div class="logo">
+    <h1>Subhan Property</h1>
+    <p>Khanpur</p>
+</div>
+<nav>
+    <a href="index.html">
+        Home
+    </a>
+    <a href="#properties">
+        Properties
+    </a>
+    <a href="#about">
+        About
+    </a>
+    <a href="#contact">
+        Contact
+    </a>
+    <a
+        href="admin/login.html"
+        class="admin-btn"
+    >
+        Admin Login
+    </a>
+</nav>
+</header>
+<section id="home" class="hero">
+<div class="hero-content">
+    <h2>
+        Find Your Perfect Property
+    </h2>
+    <p>
+        Buy and sell residential and commercial
+        properties in Khanpur with Subhan Property.
+    </p>
+    <a
+        href="#properties"
+        class="main-btn"
+    >
+        View Properties
+    </a>
+</div>
+</section>
+<section id="properties" class="section">
+<div class="section-title">
+    <h2>
+        Available Properties
+    </h2>
+    <p>
+        Check our latest available properties
+    </p>
+</div>
+<div
+    class="property-container"
+    id="propertyContainer"
+>
+    <p>
+        Loading properties...
+    </p>
+</div>
+</section>
+<section id="about" class="about-section">
+<div class="section-title">
+    <h2>
+        About Subhan Property
+    </h2>
+</div>
+<div class="about-content">
+    <h3>
+        Subhan Property - Khanpur
+    </h3>
+    <p>
+        Subhan Property is a trusted real estate property business
+        in Khanpur. We help customers find residential
+        plots, houses and commercial properties.
+    </p>
+    <p>
+        Our goal is to make buying and selling property
+        simple and reliable for our customers.
+    </p>
+</div>
+</section>
+<section id="contact" class="contact-section">
+<div class="section-title">
+    <h2>
+        Contact Us
+    </h2>
+    <p>
+        For property information, contact us
+    </p>
+</div>
+<div class="contact-box">
+    <h3>
+        Subhan Property
+    </h3>
+    <p>
+        👤 Waleed Chandia
+    </p>
+    <p>
+        📞
+        <a href="tel:03191606892">
+            0319-1606892
+        </a>
+    </p>
+    <p>
+        💬
+        <a href="https://wa.me/923191606892">
+            WhatsApp
+        </a>
+    </p>
+    <p>
+        📍 Nawakot Chowk, Khanpur
+    </p>
+    <p>
+        Near MCB Bank
+    </p>
+</div>
+</section>
+<footer>
+<h3>
+    Subhan Property
+</h3>
+<p>
+    Waleed Chandia | Khanpur
+</p>
+<p>
+    ©️ 2026 Subhan Property
+</p>
+</footer>
+<script type="module">
+import { supabase } from "./supabase.js";
+const container =
+    document.getElementById(
+        "propertyContainer"
+    );
+function getPropertyDetails(property) {
+    try {
+        const data =
+            JSON.parse(
+                property.details || "{}"
+            );
+        return {
+            description:
+                data.description || "",
+            image:
+                data.image || ""
+        };
+    } catch {
+        return {
+            description:
+                property.details || "",
+            image: ""
+        };
+    }
+}
+async function loadProperties() {
+    const { data, error } =
+        await supabase
+            .from("properties")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+    if (error) {
+        console.error(error);
+        container.innerHTML = `
+            <p>
+                ❌ ${error.message}
+            </p>
+        `;
+        return;
+    }
+    if (!data || data.length === 0) {
+        container.innerHTML = `
+            <p>
+                No properties available right now.
+            </p>
+        `;
+        return;
+    }
+    container.innerHTML = "";
+    data.forEach(function(property) {
+        const details =
+            getPropertyDetails(property);
+        const card =
+            document.createElement("div");
+        card.className =
+            "property-card";
+        card.innerHTML = `
+            <div class="property-image">
+                ${
+                    details.image
+                    ?
+                    `
+                    <img
+                        src="${details.image}"
+                        alt="${property.title || "Property"}"
+                        style="
+                            width:100%;
+                            height:220px;
+                            object-fit:cover;
+                            border-radius:10px 10px 0 0;
+                            display:block;
+                        "
+                    >
+                    `
+                    :
+                    `
+                    <div style="
+                        height:220px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:70px;
+                    ">
+                        🏠
+                    </div>
+                    `
+                }
+            </div>
+            <div class="property-info">
+                <h3>
+                    ${property.title || "Property"}
+                </h3>
+                ${
+                    property.location
+                    ?
+                    `
+                    <p>
+                        📍 ${property.location}
+                    </p>
+                    `
+                    :
+                    ""
+                }
+                ${
+                    property.size
+                    ?
+                    `
+                    <p>
+                        📐 ${property.size}
+                    </p>
+                    `
+                    :
+                    ""
+                }
+                ${
+                    property.price
+                    ?
+                    `
+                    <p>
+                        💰 ${property.price}
+                    </p>
+                    `
+                    :
+                    ""
+                }
+                ${
+                    details.description
+                    ?
+                    `
+                    <p>
+                        ${details.description}
+                    </p>
+                    `
+                    :
+                    ""
+                }
+                <a
+                    href="https://wa.me/923191606892"
+                    class="details-btn"
+                    target="_blank"
+                >
+                    💬 WhatsApp for Details
+                </a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+loadProperties();
+</script>
+</body>
+</html>
