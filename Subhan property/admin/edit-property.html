@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Property | Subhan Property</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="navbar">
+<div class="logo">
+    <h1>Subhan Property</h1>
+    <p>Admin Panel</p>
+</div>
+<nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="add-property.html">Add Property</a>
+    <a href="../index.html">View Website</a>
+</nav>
+</header>
+<main class="dashboard">
+<div class="dashboard-header">
+    <div>
+        <h2>✏️ Edit Property</h2>
+        <p>Update property information.</p>
+    </div>
+</div>
+<section class="admin-properties">
+    <form id="editForm">
+        <label>
+            Property Name
+        </label>
+        <input
+            type="text"
+            id="title"
+            required
+        >
+        <label>
+            Location
+        </label>
+        <input
+            type="text"
+            id="location"
+            required
+        >
+        <label>
+            Size
+        </label>
+        <input
+            type="text"
+            id="size"
+            required
+        >
+        <label>
+            Price
+        </label>
+        <input
+            type="text"
+            id="price"
+            required
+        >
+        <label>
+            Description
+        </label>
+        <textarea
+            id="description"
+            rows="5"
+        ></textarea>
+        <label>
+            Image URL
+        </label>
+        <input
+            type="text"
+            id="image"
+        >
+        <br><br>
+        <button
+            type="submit"
+            class="main-btn"
+        >
+            💾 Update Property
+        </button>
+        <a
+            href="dashboard.html"
+            class="main-btn"
+            style="margin-left:10px;"
+        >
+            Cancel
+        </a>
+    </form>
+</section>
+</main>
+<footer>
+<h3>
+    Subhan Property
+</h3>
+<p>
+    Waleed Chandia | Khanpur
+</p>
+<p>
+    ©️ 2026 Subhan Property
+</p>
+</footer>
+<script type="module">
+import { supabase } from "../supabase.js";
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+const propertyId =
+    params.get("id");
+const title =
+    document.getElementById("title");
+const locationInput =
+    document.getElementById("location");
+const size =
+    document.getElementById("size");
+const price =
+    document.getElementById("price");
+const description =
+    document.getElementById("description");
+const image =
+    document.getElementById("image");
+const editForm =
+    document.getElementById("editForm");
+if (!propertyId) {
+    alert("Property ID missing.");
+    window.location.href =
+        "dashboard.html";
+}
+async function loadProperty() {
+    const { data, error } =
+        await supabase
+            .from("properties")
+            .select("*")
+            .eq("id", propertyId)
+            .single();
+    if (error) {
+        console.error(error);
+        alert(
+            "❌ Failed to load property: "
+            + error.message
+        );
+        window.location.href =
+            "dashboard.html";
+        return;
+    }
+    title.value =
+        data.title || "";
+    locationInput.value =
+        data.location || "";
+    size.value =
+        data.size || "";
+    price.value =
+        data.price || "";
+    try {
+        const details =
+            JSON.parse(
+                data.details || "{}"
+            );
+        description.value =
+            details.description || "";
+        image.value =
+            details.image || "";
+    } catch {
+        description.value =
+            data.details || "";
+        image.value =
+            "";
+    }
+}
+editForm.addEventListener(
+    "submit",
+    async function(event) {
+        event.preventDefault();
+        const details = {
+            description:
+                description.value,
+            image:
+                image.value
+        };
+        const { error } =
+            await supabase
+                .from("properties")
+                .update({
+                    title:
+                        title.value,
+                    location:
+                        locationInput.value,
+                    size:
+                        size.value,
+                    price:
+                        price.value,
+                    details:
+                        JSON.stringify(details)
+                })
+                .eq("id", propertyId);
+        if (error) {
+            console.error(error);
+            alert(
+                "❌ Update failed: "
+                + error.message
+            );
+            return;
+        }
+        alert(
+            "✅ Property updated successfully!"
+        );
+        window.location.href =
+            "dashboard.html";
+    }
+);
+loadProperty();
+</script>
+</body>
+</html>
