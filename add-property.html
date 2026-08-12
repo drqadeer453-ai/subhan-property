@@ -17,6 +17,51 @@
         href="../style.css"
     >
 
+    <style>
+
+        #previewContainer {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .previewBox {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            background: #f5f5f5;
+        }
+
+        .previewBox img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .removeImage {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: #d60000;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #photoCount {
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+    </style>
+
 </head>
 
 
@@ -53,14 +98,12 @@
 </nav>
 
 
-
 <section class="admin-dashboard">
 
 
     <h2>
         ➕ Add New Property
     </h2>
-
 
 
     <form id="propertyForm">
@@ -78,7 +121,6 @@
         >
 
 
-
         <label>
             Plot Size
         </label>
@@ -89,7 +131,6 @@
             placeholder="e.g. 5 Marla"
             required
         >
-
 
 
         <label>
@@ -104,7 +145,6 @@
         >
 
 
-
         <label>
             Location
         </label>
@@ -115,7 +155,6 @@
             placeholder="e.g. Khanpur"
             required
         >
-
 
 
         <label>
@@ -129,18 +168,27 @@
         ></textarea>
 
 
-
         <label>
-            Property Image
+            Property Images
         </label>
 
         <input
             type="file"
             id="propertyImage"
             accept="image/*"
+            multiple
             required
         >
 
+        <p id="photoCount">
+            0 photos selected
+        </p>
+
+
+        <div id="previewContainer"></div>
+
+
+        <br>
 
 
         <button
@@ -153,12 +201,10 @@
     </form>
 
 
-
     <p id="message"></p>
 
 
 </section>
-
 
 
 <script type="module">
@@ -166,7 +212,6 @@
 
 import { supabase }
     from "../supabase.js";
-
 
 
 const form =
@@ -181,12 +226,35 @@ const message =
     );
 
 
+const imageInput =
+    document.getElementById(
+        "propertyImage"
+    );
+
+
+const previewContainer =
+    document.getElementById(
+        "previewContainer"
+    );
+
+
+const photoCount =
+    document.getElementById(
+        "photoCount"
+    );
+
+
+let selectedFiles = [];
+
+
+/* =========================
+   IMAGE RESIZE
+========================= */
 
 function resizeImage(file) {
 
     return new Promise(
         (resolve, reject) => {
-
 
             const reader =
                 new FileReader();
@@ -195,7 +263,6 @@ function resizeImage(file) {
             reader.onload =
                 function(event) {
 
-
                     const image =
                         new Image();
 
@@ -203,17 +270,13 @@ function resizeImage(file) {
                     image.onload =
                         function() {
 
-
                             const maxWidth = 800;
-
 
                             let width =
                                 image.width;
 
-
                             let height =
                                 image.height;
-
 
 
                             if (
@@ -233,7 +296,6 @@ function resizeImage(file) {
                             }
 
 
-
                             const canvas =
                                 document.createElement(
                                     "canvas"
@@ -243,10 +305,8 @@ function resizeImage(file) {
                             canvas.width =
                                 width;
 
-
                             canvas.height =
                                 height;
-
 
 
                             const context =
@@ -264,7 +324,6 @@ function resizeImage(file) {
                             );
 
 
-
                             const imageData =
                                 canvas.toDataURL(
                                     "image/jpeg",
@@ -276,7 +335,6 @@ function resizeImage(file) {
                                 imageData
                             );
 
-
                         };
 
 
@@ -286,7 +344,6 @@ function resizeImage(file) {
 
                     image.src =
                         event.target.result;
-
 
                 };
 
@@ -299,6 +356,134 @@ function resizeImage(file) {
                 file
             );
 
+        }
+    );
+
+}
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+imageInput.addEventListener(
+    "change",
+    function() {
+
+        selectedFiles =
+            Array.from(
+                this.files
+            );
+
+
+        showPreviews();
+
+    }
+);
+
+
+/* =========================
+   SHOW PREVIEWS
+========================= */
+
+function showPreviews() {
+
+    previewContainer.innerHTML = "";
+
+
+    photoCount.textContent =
+        selectedFiles.length
+        +
+        (
+            selectedFiles.length === 1
+                ? " photo selected"
+                : " photos selected"
+        );
+
+
+    selectedFiles.forEach(
+        function(file, index) {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    const box =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    box.className =
+                        "previewBox";
+
+
+                    const img =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    img.src =
+                        event.target.result;
+
+
+                    const removeButton =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    removeButton.type =
+                        "button";
+
+
+                    removeButton.className =
+                        "removeImage";
+
+
+                    removeButton.textContent =
+                        "×";
+
+
+                    removeButton.onclick =
+                        function() {
+
+                            selectedFiles.splice(
+                                index,
+                                1
+                            );
+
+                            updateFileInput();
+
+                            showPreviews();
+
+                        };
+
+
+                    box.appendChild(
+                        img
+                    );
+
+
+                    box.appendChild(
+                        removeButton
+                    );
+
+
+                    previewContainer.appendChild(
+                        box
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
 
         }
     );
@@ -306,19 +491,46 @@ function resizeImage(file) {
 }
 
 
+/* =========================
+   UPDATE FILE INPUT
+========================= */
+
+function updateFileInput() {
+
+    const dataTransfer =
+        new DataTransfer();
+
+
+    selectedFiles.forEach(
+        function(file) {
+
+            dataTransfer.items.add(
+                file
+            );
+
+        }
+    );
+
+
+    imageInput.files =
+        dataTransfer.files;
+
+}
+
+
+/* =========================
+   SUBMIT PROPERTY
+========================= */
 
 form.addEventListener(
     "submit",
     async function(event) {
 
-
         event.preventDefault();
-
 
 
         message.textContent =
             "⏳ Property save ho rahi hai...";
-
 
 
         try {
@@ -333,7 +545,6 @@ form.addEventListener(
                     .trim();
 
 
-
             const size =
                 document
                     .getElementById(
@@ -341,7 +552,6 @@ form.addEventListener(
                     )
                     .value
                     .trim();
-
 
 
             const price =
@@ -353,7 +563,6 @@ form.addEventListener(
                     .trim();
 
 
-
             const location =
                 document
                     .getElementById(
@@ -361,7 +570,6 @@ form.addEventListener(
                     )
                     .value
                     .trim();
-
 
 
             const detailsText =
@@ -373,37 +581,40 @@ form.addEventListener(
                     .trim();
 
 
-
-            const imageFile =
-                document
-                    .getElementById(
-                        "propertyImage"
-                    )
-                    .files[0];
-
-
-
-            if (!imageFile) {
+            if (
+                selectedFiles.length === 0
+            ) {
 
                 message.textContent =
-                    "❌ Property image select karein.";
+                    "❌ Kam az kam 1 photo select karein.";
 
                 return;
 
             }
 
 
-
             message.textContent =
-                "⏳ Image prepare ho rahi hai...";
+                "⏳ Photos prepare ho rahi hain...";
 
 
+            const images = [];
 
-            const image =
-                await resizeImage(
-                    imageFile
+
+            for (
+                const file of selectedFiles
+            ) {
+
+                const image =
+                    await resizeImage(
+                        file
+                    );
+
+
+                images.push(
+                    image
                 );
 
+            }
 
 
             const details = {
@@ -411,11 +622,18 @@ form.addEventListener(
                 description:
                     detailsText,
 
+                images:
+                    images,
+
+                /* Old system compatibility */
                 image:
-                    image
+                    images[0]
 
             };
 
+
+            message.textContent =
+                "⏳ Property database mein save ho rahi hai...";
 
 
             const { error } =
@@ -445,7 +663,6 @@ form.addEventListener(
                     }]);
 
 
-
             if (error) {
 
                 console.error(
@@ -463,19 +680,27 @@ form.addEventListener(
             }
 
 
-
             message.textContent =
                 "✅ Property successfully added!";
-
 
 
             form.reset();
 
 
+            selectedFiles = [];
+
+
+            previewContainer.innerHTML =
+                "";
+
+
+            photoCount.textContent =
+                "0 photos selected";
+
+
         }
 
         catch (error) {
-
 
             console.error(
                 error
@@ -487,9 +712,7 @@ form.addEventListener(
                 +
                 error.message;
 
-
         }
-
 
     }
 );

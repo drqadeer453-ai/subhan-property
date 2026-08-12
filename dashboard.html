@@ -1,256 +1,981 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Admin Dashboard | Subhan Property</title>
+
 <link rel="stylesheet" href="../style.css">
+
+<style>
+
+/* =========================
+   STATUS BADGES
+========================= */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.available {
+    background: #dff6e5;
+    color: #16803c;
+}
+
+.sold {
+    background: #ffe0e0;
+    color: #d62828;
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.sold-btn {
+    background: #d62828;
+    color: white;
+}
+
+.available-btn {
+    background: #16803c;
+    color: white;
+}
+
+.edit-btn {
+    background: #1769aa;
+    color: white;
+}
+
+.delete-btn {
+    background: #555;
+    color: white;
+}
+
+.action-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    position: relative;
+    z-index: 10;
+
+    min-height: 44px;
+}
+
+
+/* =========================
+   ADMIN PROPERTY CARD
+========================= */
+
+.admin-property-card {
+    overflow: visible !important;
+}
+
+
+/* =========================
+   ACTION AREA
+========================= */
+
+.admin-property-card > div:last-child {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+
+/* =========================
+   MOBILE FIX
+========================= */
+
+@media (max-width: 600px) {
+
+    .admin-property-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
+    .admin-property-card .action-btn {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        width: 100% !important;
+        min-width: 0 !important;
+
+        padding: 12px 14px !important;
+
+        font-size: 14px !important;
+    }
+
+    .admin-property-card > div:last-child {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+}
+
+
+/* =========================
+   PROPERTY IMAGE MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .admin-property-card img {
+        max-width: 100% !important;
+        height: auto !important;
+        object-fit: cover !important;
+    }
+
+}
+
+</style>
+
 </head>
+
+
 <body>
+
+
 <header class="navbar">
-<div class="logo">
-    <h1>Subhan Property</h1>
-    <p>Admin Panel</p>
-</div>
-<nav>
-    <a href="../index.html">View Website</a>
-    <a href="add-property.html">Add Property</a>
-    <a href="login.html">Logout</a>
-</nav>
+
+    <div class="logo">
+
+        <h1>Subhan Property</h1>
+
+        <p>Admin Panel</p>
+
+    </div>
+
+
+    <nav>
+
+        <a href="../index.html">
+            View Website
+        </a>
+
+        <a href="add-property.html">
+            Add Property
+        </a>
+
+        <a href="login.html">
+            Logout
+        </a>
+
+    </nav>
+
 </header>
+
+
+
 <main class="dashboard">
-<div class="dashboard-header">
-    <div>
-        <h2>Admin Dashboard</h2>
-        <p>Manage your properties from here.</p>
+
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <h2>Admin Dashboard</h2>
+
+            <p>
+                Manage your properties from here.
+            </p>
+
+        </div>
+
+
+        <a
+            href="add-property.html"
+            class="main-btn"
+        >
+
+            + Add New Property
+
+        </a>
+
     </div>
-    <a href="add-property.html" class="main-btn">
-        + Add New Property
-    </a>
-</div>
-<div class="stats-container">
-    <div class="stat-card">
-        <h3 id="propertyCount">0</h3>
-        <p>Total Properties</p>
+
+
+
+    <div class="stats-container">
+
+
+        <div class="stat-card">
+
+            <h3 id="propertyCount">
+                0
+            </h3>
+
+            <p>
+                Total Properties
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Subhan Property
+            </h3>
+
+            <p>
+                Business
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Khanpur
+            </h3>
+
+            <p>
+                Location
+            </p>
+
+        </div>
+
+
     </div>
-    <div class="stat-card">
-        <h3>Subhan Property</h3>
-        <p>Business</p>
-    </div>
-    <div class="stat-card">
-        <h3>Khanpur</h3>
-        <p>Location</p>
-    </div>
-</div>
-<section class="admin-properties">
-    <h2>Properties</h2>
-    <div id="propertyList">
-        Loading properties...
-    </div>
-</section>
+
+
+
+    <section class="admin-properties">
+
+        <h2>
+            Properties
+        </h2>
+
+
+        <div id="propertyList">
+
+            Loading properties...
+
+        </div>
+
+    </section>
+
+
 </main>
+
+
+
 <footer>
-<h3>Subhan Property</h3>
-<p>Waleed Chandia | Khanpur</p>
-<p>©️ 2026 Subhan Property</p>
+
+    <h3>
+        Subhan Property
+    </h3>
+
+    <p>
+        Waleed Chandia | Khanpur
+    </p>
+
+    <p>
+        ©️ 2026 Subhan Property
+    </p>
+
 </footer>
+
+
+
 <script type="module">
+
 import { supabase } from "../supabase.js";
+
+
 const propertyList =
     document.getElementById("propertyList");
+
+
 const propertyCount =
     document.getElementById("propertyCount");
+
+
+
+/* =========================
+   GET PROPERTY DETAILS
+========================= */
+
 function getPropertyDetails(property) {
+
     try {
+
         const data =
             JSON.parse(property.details || "{}");
+
         return {
+
             description:
                 data.description || "",
+
             image:
                 data.image || ""
+
         };
-    } catch {
+
+    }
+
+    catch {
+
         return {
+
             description:
                 property.details || "",
-            image: ""
+
+            image:
+                ""
+
         };
+
     }
+
 }
+
+
+
+/* =========================
+   LOAD PROPERTIES
+========================= */
+
 async function loadProperties() {
-    const { data, error } =
-        await supabase
-            .from("properties")
-            .select("*")
-            .order("created_at", {
+
+    const {
+        data,
+        error
+    } = await supabase
+        .from("properties")
+        .select("*")
+        .order(
+            "created_at",
+            {
                 ascending: false
-            });
+            }
+        );
+
+
     if (error) {
+
         console.error(error);
-        propertyList.innerHTML =
-            `<p>❌ ${error.message}</p>`;
+
+        propertyList.innerHTML = `
+
+            <p>
+                ❌ ${error.message}
+            </p>
+
+        `;
+
         return;
+
     }
+
+
     propertyCount.textContent =
         data.length;
+
+
     if (data.length === 0) {
+
         propertyList.innerHTML = `
+
             <div class="empty-message">
-                <h3>No properties added yet</h3>
-                <p>Add your first property.</p>
+
+                <h3>
+                    No properties added yet
+                </h3>
+
+                <p>
+                    Add your first property.
+                </p>
+
                 <a
                     href="add-property.html"
                     class="main-btn"
                 >
+
                     Add Property
+
                 </a>
+
             </div>
+
         `;
+
         return;
+
     }
+
+
     propertyList.innerHTML = "";
+
+
     data.forEach(function(property) {
+
+
         const details =
             getPropertyDetails(property);
+
+
         const card =
             document.createElement("div");
+
+
         card.className =
             "admin-property-card";
-        card.innerHTML = `
-            ${
-                details.image
-                ?
-                `
+
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        const status =
+            property.status || "available";
+
+
+        const isSold =
+            status.toLowerCase() === "sold";
+
+
+        const statusHTML =
+
+            isSold
+
+            ?
+
+            `
+
+                <span
+                    class="status-badge sold"
+                >
+
+                    🔴 SOLD
+
+                </span>
+
+            `
+
+            :
+
+            `
+
+                <span
+                    class="status-badge available"
+                >
+
+                    🟢 AVAILABLE
+
+                </span>
+
+            `;
+
+
+
+        /* =========================
+           IMAGE
+        ========================= */
+
+        const imageHTML =
+
+            details.image
+
+            ?
+
+            `
+
                 <img
+
                     src="${details.image}"
+
+                    alt="Property"
+
                     style="
                         width:180px;
                         height:120px;
                         object-fit:cover;
                         border-radius:10px;
                         margin-bottom:10px;
+                        max-width:100%;
                     "
+
                 >
-                `
-                :
-                ""
-            }
+
+            `
+
+            :
+
+            "";
+
+
+
+        /* =========================
+           STATUS BUTTON
+        ========================= */
+
+        const statusButton =
+
+            isSold
+
+            ?
+
+            `
+
+                <button
+
+                    class="
+                        action-btn
+                        available-btn
+                    "
+
+                    data-id="${property.id}"
+
+                    type="button"
+
+                >
+
+                    🟢 Mark Available
+
+                </button>
+
+            `
+
+            :
+
+            `
+
+                <button
+
+                    class="
+                        action-btn
+                        sold-btn
+                    "
+
+                    data-id="${property.id}"
+
+                    type="button"
+
+                >
+
+                    🔴 Mark as Sold
+
+                </button>
+
+            `;
+
+
+
+        /* =========================
+           CARD
+        ========================= */
+
+        card.innerHTML = `
+
+            ${imageHTML}
+
+
             <div>
+
                 <h3>
-                    ${property.title || ""}
+
+                    ${
+                        property.title || ""
+                    }
+
                 </h3>
+
+
+                ${statusHTML}
+
+
                 <p>
-                    📍 ${property.location || ""}
+
+                    📍
+                    ${
+                        property.location || ""
+                    }
+
                 </p>
+
+
                 <p>
-                    📐 ${property.size || ""}
+
+                    📐
+                    ${
+                        property.size || ""
+                    }
+
                 </p>
+
+
                 <p>
-                    💰 ${property.price || ""}
+
+                    💰
+                    ${
+                        property.price || ""
+                    }
+
                 </p>
+
+
                 <p>
-                    ${details.description || ""}
+
+                    ${
+                        details.description || ""
+                    }
+
                 </p>
+
             </div>
+
+
+
             <div
+
                 style="
                     display:flex;
                     gap:10px;
                     margin-top:15px;
                     flex-wrap:wrap;
+                    width:100%;
+                    overflow:visible;
                 "
+
             >
+
+                ${statusButton}
+
+
                 <button
-                    class="edit-btn"
-                    data-id="${property.id}"
-                    type="button"
-                    style="
-                        padding:10px 16px;
-                        border:none;
-                        border-radius:8px;
-                        cursor:pointer;
+
+                    class="
+                        action-btn
+                        edit-btn
                     "
+
+                    data-id="${property.id}"
+
+                    type="button"
+
                 >
+
                     ✏️ Edit
+
                 </button>
+
+
+
                 <button
-                    class="delete-btn"
-                    data-id="${property.id}"
-                    type="button"
-                    style="
-                        padding:10px 16px;
-                        border:none;
-                        border-radius:8px;
-                        cursor:pointer;
+
+                    class="
+                        action-btn
+                        delete-btn
                     "
+
+                    data-id="${property.id}"
+
+                    type="button"
+
                 >
+
                     🗑️ Delete
+
                 </button>
+
+
             </div>
+
         `;
+
+
+
+        propertyList.appendChild(card);
+
+
+
+        /* =========================
+           SOLD / AVAILABLE BUTTON
+        ========================= */
+
+        const statusBtn =
+            card.querySelector(
+                ".sold-btn, .available-btn"
+            );
+
+
+        if (statusBtn) {
+
+            statusBtn.addEventListener(
+                "click",
+                function() {
+
+                    toggleStatus(
+                        property.id,
+                        isSold
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================
+           EDIT BUTTON
+        ========================= */
+
         const editButton =
             card.querySelector(".edit-btn");
-        editButton.addEventListener(
-            "click",
-            function() {
-                const id =
-                    this.getAttribute("data-id");
-                if (!id) {
-                    alert(
-                        "❌ Property ID not found!"
-                    );
-                    return;
+
+
+        if (editButton) {
+
+            editButton.addEventListener(
+                "click",
+                function() {
+
+                    const id =
+                        this.getAttribute("data-id");
+
+
+                    if (!id) {
+
+                        alert(
+                            "❌ Property ID not found!"
+                        );
+
+                        return;
+
+                    }
+
+
+                    window.location.href =
+                        "edit-property.html?id=" +
+                        encodeURIComponent(id);
+
                 }
-                window.location.href =
-                    "edit-property.html?id="
-                    + encodeURIComponent(id);
-            }
-        );
+            );
+
+        }
+
+
+
+        /* =========================
+           DELETE BUTTON
+        ========================= */
+
         const deleteButton =
             card.querySelector(".delete-btn");
-        deleteButton.addEventListener(
-            "click",
-            function() {
-                deleteProperty(
-                    this.getAttribute("data-id")
-                );
-            }
-        );
-        propertyList.appendChild(card);
+
+
+        if (deleteButton) {
+
+            deleteButton.addEventListener(
+                "click",
+                function() {
+
+                    deleteProperty(
+                        this.getAttribute("data-id")
+                    );
+
+                }
+            );
+
+        }
+
+
     });
+
 }
-async function deleteProperty(id) {
+
+
+
+/* =========================
+   TOGGLE SOLD STATUS
+========================= */
+
+async function toggleStatus(
+    id,
+    currentlySold
+) {
+
     if (!id) {
-        alert("❌ Property ID not found!");
+
+        alert(
+            "❌ Property ID not found!"
+        );
+
         return;
+
     }
+
+
+    const newStatus =
+        currentlySold
+        ? "available"
+        : "sold";
+
+
+    const message =
+        currentlySold
+        ?
+        "Property ko Available karna hai?"
+        :
+        "Property ko SOLD mark karna hai?";
+
+
+    if (!confirm(message)) {
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } = await supabase
+        .from("properties")
+        .update({
+            status: newStatus
+        })
+        .eq(
+            "id",
+            id
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Status update failed: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    alert(
+
+        currentlySold
+        ?
+        "🟢 Property Available kar di gayi!"
+        :
+        "🔴 Property SOLD mark kar di gayi!"
+
+    );
+
+
+    loadProperties();
+
+}
+
+
+
+/* =========================
+   DELETE PROPERTY
+========================= */
+
+async function deleteProperty(id) {
+
+    if (!id) {
+
+        alert(
+            "❌ Property ID not found!"
+        );
+
+        return;
+
+    }
+
+
     const confirmDelete =
         confirm(
             "Are you sure you want to delete this property?"
         );
+
+
     if (!confirmDelete) {
+
         return;
+
     }
-    const { error } =
-        await supabase
-            .from("properties")
-            .delete()
-            .eq("id", id);
-    if (error) {
-        console.error(error);
-        alert(
-            "❌ Delete failed: "
-            + error.message
+
+
+    const {
+        error
+    } = await supabase
+        .from("properties")
+        .delete()
+        .eq(
+            "id",
+            id
         );
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Delete failed: " +
+            error.message
+        );
+
         return;
+
     }
+
+
     alert(
         "✅ Property deleted successfully!"
     );
+
+
     loadProperties();
+
 }
+
+
+
+/* =========================
+   START
+========================= */
+
 loadProperties();
+
 </script>
+
+
 </body>
+
 </html>

@@ -1,296 +1,1469 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
 <title>Subhan Property | Khanpur</title>
-<link rel="stylesheet" href="style.css">
+
+
+<style>
+
+/* =========================
+   BASIC
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    color: #222;
+
+    /*
+       MAIN BACKGROUND IMAGE
+    */
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.72),
+            rgba(255,255,255,0.72)
+        ),
+        url("background.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-attachment: fixed;
+
+    background-repeat: no-repeat;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(18,63,102,0.96),
+            rgba(22,119,184,0.94)
+        );
+
+    color: white;
+
+    text-align: center;
+
+    padding: 35px 15px;
+
+}
+
+header h1 {
+
+    margin: 0;
+
+    font-size: 38px;
+
+}
+
+header p {
+
+    margin: 8px 0 0;
+
+    font-size: 20px;
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav {
+
+    background:
+        rgba(11,46,77,0.96);
+
+    padding: 15px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
+
+}
+
+nav a {
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+}
+
+nav a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* USER AREA */
+
+.user-area {
+
+    color: white;
+
+    font-size: 14px;
+
+    text-align: center;
+
+}
+
+.logout {
+
+    background: #d62828;
+
+    border: none;
+
+    color: white;
+
+    padding: 8px 14px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    margin-left: 8px;
+
+}
+
+.logout:hover {
+
+    background: #a71919;
+
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+
+    text-align: center;
+
+    padding: 90px 20px;
+
+    background:
+        rgba(255,255,255,0.84);
+
+    backdrop-filter: blur(2px);
+
+}
+
+.hero h2 {
+
+    color: #123f66;
+
+    font-size: 50px;
+
+    margin: 0 auto 20px;
+
+    max-width: 850px;
+
+}
+
+.hero p {
+
+    color: #444;
+
+    font-size: 22px;
+
+    max-width: 800px;
+
+    margin: auto;
+
+    line-height: 1.6;
+
+}
+
+.hero-button {
+
+    display: inline-block;
+
+    margin-top: 25px;
+
+    background: #123f66;
+
+    color: white;
+
+    padding: 13px 25px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+}
+
+.hero-button:hover {
+
+    background: #0b2e4d;
+
+}
+
+
+/* =========================
+   PROPERTIES SECTION
+========================= */
+
+.properties-section {
+
+    padding: 50px 20px;
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    background:
+        rgba(255,255,255,0.88);
+
+    border-radius: 15px;
+
+}
+
+.properties-section h2 {
+
+    text-align: center;
+
+    color: #123f66;
+
+    font-size: 36px;
+
+    margin-bottom: 35px;
+
+}
+
+
+#properties {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(280px, 1fr)
+        );
+
+    gap: 25px;
+
+}
+
+
+/* =========================
+   PROPERTY CARD
+========================= */
+
+.property-card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,0.15);
+
+}
+
+
+/* PROPERTY IMAGES */
+
+.property-images {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 230px;
+
+    background: #ddd;
+
+    overflow: hidden;
+
+}
+
+.property-images img {
+
+    width: 100%;
+
+    height: 230px;
+
+    object-fit: cover;
+
+    display: none;
+
+}
+
+.property-images img.active {
+
+    display: block;
+
+}
+
+
+/* IMAGE BUTTONS */
+
+.image-buttons {
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 10px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 0 10px;
+
+}
+
+.image-buttons button {
+
+    border: none;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    color: white;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+}
+
+
+/* PROPERTY INFO */
+
+.property-info {
+
+    padding: 20px;
+
+}
+
+.property-info h3 {
+
+    margin-top: 0;
+
+    color: #123f66;
+
+    font-size: 24px;
+
+}
+
+.property-info p {
+
+    margin: 9px 0;
+
+    color: #555;
+
+    line-height: 1.5;
+
+}
+
+.price {
+
+    color: #16803c !important;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+
+/* WHATSAPP BUTTON */
+
+.contact-button {
+
+    display: block;
+
+    text-align: center;
+
+    background: #16803c;
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 11px;
+
+    border-radius: 7px;
+
+    margin-top: 15px;
+
+}
+
+.contact-button:hover {
+
+    background: #0f642e;
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading {
+
+    text-align: center;
+
+    font-size: 18px;
+
+    color: #666;
+
+}
+
+.empty {
+
+    text-align: center;
+
+    color: #777;
+
+    font-size: 18px;
+
+}
+
+
+/* =========================
+   ABOUT
+========================= */
+
+#about {
+
+    margin-top: 40px;
+
+    background:
+        rgba(255,255,255,0.90);
+
+    padding: 55px 20px;
+
+    text-align: center;
+
+}
+
+#about h2 {
+
+    color: #123f66;
+
+    font-size: 35px;
+
+}
+
+#about p {
+
+    max-width: 700px;
+
+    margin: auto;
+
+    line-height: 1.7;
+
+    color: #555;
+
+}
+
+
+/* =========================
+   CONTACT
+========================= */
+
+#contact {
+
+    margin-top: 0;
+
+    padding: 55px 20px;
+
+    text-align: center;
+
+    background:
+        rgba(234,243,250,0.93);
+
+}
+
+#contact h2 {
+
+    color: #123f66;
+
+    font-size: 35px;
+
+}
+
+
+/* WHATSAPP */
+
+.whatsapp-main {
+
+    display: inline-block;
+
+    background: #16803c;
+
+    color: white;
+
+    padding: 12px 22px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    margin-top: 10px;
+
+    font-weight: bold;
+
+}
+
+.whatsapp-main:hover {
+
+    background: #0f642e;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+
+    background:
+        rgba(11,46,77,0.97);
+
+    color: white;
+
+    text-align: center;
+
+    padding: 30px 15px;
+
+    margin-top: 40px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header h1 {
+
+        font-size: 30px;
+
+    }
+
+    header p {
+
+        font-size: 18px;
+
+    }
+
+    nav {
+
+        gap: 15px;
+
+    }
+
+    nav a {
+
+        font-size: 14px;
+
+    }
+
+    .hero {
+
+        padding: 65px 18px;
+
+    }
+
+    .hero h2 {
+
+        font-size: 38px;
+
+    }
+
+    .hero p {
+
+        font-size: 18px;
+
+    }
+
+    .properties-section {
+
+        margin: 15px;
+
+        padding: 35px 15px;
+
+    }
+
+}
+
+
+/* =========================
+   VERY SMALL MOBILE
+========================= */
+
+@media (max-width: 400px) {
+
+    .hero h2 {
+
+        font-size: 32px;
+
+    }
+
+    nav {
+
+        gap: 8px;
+
+    }
+
+    nav a {
+
+        font-size: 13px;
+
+    }
+
+}
+
+</style>
+
 </head>
+
+
 <body>
-<header class="navbar">
-<div class="logo">
-    <h1>Subhan Property</h1>
-    <p>Khanpur</p>
-</div>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <h1>
+        SUBHAN PROPERTY
+    </h1>
+
+    <p>
+        Khanpur
+    </p>
+
+</header>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
 <nav>
+
     <a href="index.html">
         Home
     </a>
-    <a href="#properties">
+
+    <a href="#properties-section">
         Properties
     </a>
+
     <a href="#about">
         About
     </a>
+
     <a href="#contact">
         Contact
     </a>
-    <a
-        href="admin/login.html"
-        class="admin-btn"
-    >
-        Admin Login
-    </a>
+
+
+    <span
+        class="user-area"
+        id="userArea"
+    ></span>
+
 </nav>
-</header>
-<section id="home" class="hero">
-<div class="hero-content">
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
     <h2>
         Find Your Perfect Property
     </h2>
+
     <p>
-        Buy and sell residential and commercial
-        properties in Khanpur with Subhan Property.
+        Buy and sell residential and
+        commercial properties in Khanpur
+        with Subhan Property.
     </p>
+
     <a
-        href="#properties"
-        class="main-btn"
+        href="#properties-section"
+        class="hero-button"
     >
         View Properties
     </a>
-</div>
+
 </section>
-<section id="properties" class="section">
-<div class="section-title">
+
+
+<!-- =========================
+     PROPERTIES
+========================= -->
+
+<section
+    class="properties-section"
+    id="properties-section"
+>
+
     <h2>
         Available Properties
     </h2>
-    <p>
-        Check our latest available properties
-    </p>
-</div>
-<div
-    class="property-container"
-    id="propertyContainer"
->
-    <p>
-        Loading properties...
-    </p>
-</div>
+
+
+    <div
+        id="properties"
+    >
+
+        <p class="loading">
+            Properties load ho rahi hain...
+        </p>
+
+    </div>
+
 </section>
-<section id="about" class="about-section">
-<div class="section-title">
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section id="about">
+
     <h2>
         About Subhan Property
     </h2>
-</div>
-<div class="about-content">
-    <h3>
-        Subhan Property - Khanpur
-    </h3>
+
     <p>
-        Subhan Property is a trusted real estate property business
-        in Khanpur. We help customers find residential
-        plots, houses and commercial properties.
+
+        Subhan Property Khanpur mein
+        residential aur commercial
+        properties ke liye trusted
+        property services provide karta hai.
+
     </p>
-    <p>
-        Our goal is to make buying and selling property
-        simple and reliable for our customers.
-    </p>
-</div>
+
 </section>
-<section id="contact" class="contact-section">
-<div class="section-title">
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section id="contact">
+
     <h2>
         Contact Us
     </h2>
+
+
     <p>
-        For property information, contact us
+
+        <strong>
+            Waleed Chandia
+        </strong>
+
     </p>
-</div>
-<div class="contact-box">
-    <h3>
+
+
+    <p>
         Subhan Property
-    </h3>
-    <p>
-        👤 Waleed Chandia
     </p>
+
+
     <p>
-        📞
-        <a href="tel:03191606892">
-            0319-1606892
-        </a>
+
+        Khanpur, Nawakot Chowk,
+        near MCB Bank
+
     </p>
+
+
     <p>
-        💬
-        <a href="https://wa.me/923191606892">
-            WhatsApp
-        </a>
+
+        📞 03191606892
+
     </p>
-    <p>
-        📍 Nawakot Chowk, Khanpur
-    </p>
-    <p>
-        Near MCB Bank
-    </p>
-</div>
+
+
+    <a
+        href="https://wa.me/923191606892"
+        target="_blank"
+        class="whatsapp-main"
+    >
+
+        WhatsApp
+
+    </a>
+
 </section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
 <footer>
-<h3>
-    Subhan Property
-</h3>
-<p>
-    Waleed Chandia | Khanpur
-</p>
-<p>
-    ©️ 2026 Subhan Property
-</p>
+
+    <p>
+
+        © 2026 Subhan Property |
+        Khanpur
+
+    </p>
+
 </footer>
+
+
+
 <script type="module">
-import { supabase } from "./supabase.js";
-const container =
+
+
+/* =========================
+   SUPABASE
+========================= */
+
+import { supabase }
+    from "./supabase.js";
+
+
+
+/* =========================
+   CHECK LOGIN
+========================= */
+
+const {
+
+    data: {
+        session
+    }
+
+} = await supabase.auth.getSession();
+
+
+
+if (!session) {
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================
+   USER EMAIL + LOGOUT
+========================= */
+
+const userArea =
     document.getElementById(
-        "propertyContainer"
+        "userArea"
     );
-function getPropertyDetails(property) {
-    try {
-        const data =
-            JSON.parse(
-                property.details || "{}"
-            );
-        return {
-            description:
-                data.description || "",
-            image:
-                data.image || ""
-        };
-    } catch {
-        return {
-            description:
-                property.details || "",
-            image: ""
-        };
-    }
+
+
+if (session) {
+
+    userArea.innerHTML = `
+
+        <span>
+            ${session.user.email}
+        </span>
+
+        <button
+            class="logout"
+            id="logoutBtn"
+        >
+            Logout
+        </button>
+
+    `;
+
+
+    document
+        .getElementById(
+            "logoutBtn"
+        )
+        .addEventListener(
+            "click",
+            async function() {
+
+                await supabase.auth.signOut();
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
 }
+
+
+/* =========================
+   LOAD PROPERTIES
+========================= */
+
 async function loadProperties() {
-    const { data, error } =
-        await supabase
-            .from("properties")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+
+
+    const container =
+        document.getElementById(
+            "properties"
+        );
+
+
+    const {
+
+        data,
+        error
+
+    } = await supabase
+
+        .from("properties")
+
+        .select("*")
+
+        .order(
+            "id",
+            {
+                ascending: false
+            }
+        );
+
+
     if (error) {
+
         console.error(error);
+
         container.innerHTML = `
-            <p>
-                ❌ ${error.message}
+
+            <p class="empty">
+
+                Properties load nahi ho saki.
+
             </p>
+
         `;
+
         return;
+
     }
-    if (!data || data.length === 0) {
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
         container.innerHTML = `
-            <p>
-                No properties available right now.
+
+            <p class="empty">
+
+                Abhi koi property available nahi hai.
+
             </p>
+
         `;
+
         return;
+
     }
+
+
     container.innerHTML = "";
-    data.forEach(function(property) {
-        const details =
-            getPropertyDetails(property);
-        const card =
-            document.createElement("div");
-        card.className =
-            "property-card";
-        card.innerHTML = `
-            <div class="property-image">
-                ${
+
+
+    data.forEach(
+        function(property) {
+
+
+            let details = {};
+
+
+            try {
+
+                details =
+
+                    typeof property.details
+                    === "string"
+
+                    ?
+
+                    JSON.parse(
+                        property.details
+                    )
+
+                    :
+
+                    property.details
+                    || {};
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Details parse error",
+                    error
+                );
+
+            }
+
+
+            let images = [];
+
+
+            /*
+               Multiple images
+            */
+
+            if (
+                Array.isArray(
+                    details.images
+                )
+            ) {
+
+                images =
+                    details.images;
+
+            }
+
+
+            /*
+               Old single image
+            */
+
+            else if (
+                details.image
+            ) {
+
+                images = [
+
                     details.image
-                    ?
-                    `
-                    <img
-                        src="${details.image}"
-                        alt="${property.title || "Property"}"
+
+                ];
+
+            }
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "property-card";
+
+
+            /* =====================
+               IMAGES
+            ===================== */
+
+            let imagesHTML = "";
+
+
+            if (
+                images.length > 0
+            ) {
+
+
+                images.forEach(
+                    function(
+                        image,
+                        index
+                    ) {
+
+
+                        imagesHTML += `
+
+                            <img
+
+                                src="${image}"
+
+                                class="${
+                                    index === 0
+                                    ? "active"
+                                    : ""
+                                }"
+
+                                alt="Property"
+
+                            >
+
+                        `;
+
+                    }
+                );
+
+
+            }
+
+            else {
+
+
+                imagesHTML = `
+
+                    <div
+
                         style="
-                            width:100%;
-                            height:220px;
-                            object-fit:cover;
-                            border-radius:10px 10px 0 0;
-                            display:block;
+                            height:230px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            color:#777;
                         "
+
                     >
-                    `
-                    :
-                    `
-                    <div style="
-                        height:220px;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        font-size:70px;
-                    ">
-                        🏠
+
+                        No Image
+
                     </div>
-                    `
-                }
-            </div>
-            <div class="property-info">
-                <h3>
-                    ${property.title || "Property"}
-                </h3>
-                ${
-                    property.location
-                    ?
-                    `
-                    <p>
-                        📍 ${property.location}
-                    </p>
-                    `
-                    :
-                    ""
-                }
-                ${
-                    property.size
-                    ?
-                    `
-                    <p>
-                        📐 ${property.size}
-                    </p>
-                    `
-                    :
-                    ""
-                }
-                ${
-                    property.price
-                    ?
-                    `
-                    <p>
-                        💰 ${property.price}
-                    </p>
-                    `
-                    :
-                    ""
-                }
-                ${
-                    details.description
-                    ?
-                    `
-                    <p>
-                        ${details.description}
-                    </p>
-                    `
-                    :
-                    ""
-                }
-                <a
-                    href="https://wa.me/923191606892"
-                    class="details-btn"
-                    target="_blank"
+
+                `;
+
+            }
+
+
+            /* =====================
+               IMAGE BUTTONS
+            ===================== */
+
+            const buttons =
+
+                images.length > 1
+
+                ?
+
+                `
+
+                    <div
+                        class="image-buttons"
+                    >
+
+                        <button
+                            class="prev"
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            class="next"
+                        >
+                            ›
+                        </button>
+
+                    </div>
+
+                `
+
+                :
+
+                "";
+
+
+            /* =====================
+               CARD HTML
+            ===================== */
+
+            card.innerHTML = `
+
+                <div
+                    class="property-images"
                 >
-                    💬 WhatsApp for Details
-                </a>
-            </div>
-        `;
-        container.appendChild(card);
-    });
+
+                    ${imagesHTML}
+
+                    ${buttons}
+
+                </div>
+
+
+                <div
+                    class="property-info"
+                >
+
+                    <h3>
+
+                        ${
+                            property.title
+                            ||
+                            "Property"
+                        }
+
+                    </h3>
+
+
+                    <p>
+
+                        📐
+
+                        <strong>
+                            Size:
+                        </strong>
+
+                        ${
+                            property.size
+                            ||
+                            "-"
+                        }
+
+                    </p>
+
+
+                    <p
+                        class="price"
+                    >
+
+                        💰
+
+                        ${
+                            property.price
+                            ||
+                            "-"
+                        }
+
+                    </p>
+
+
+                    <p>
+
+                        📍
+
+                        <strong>
+                            Location:
+                        </strong>
+
+                        ${
+                            property.location
+                            ||
+                            "-"
+                        }
+
+                    </p>
+
+
+                    <p>
+
+                        ${
+                            details.description
+                            ||
+                            "No details available."
+                        }
+
+                    </p>
+
+
+                    <a
+
+                        class="contact-button"
+
+                        href="https://wa.me/923191606892"
+
+                        target="_blank"
+
+                    >
+
+                        Contact on WhatsApp
+
+                    </a>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+
+            /* =====================
+               IMAGE SLIDER
+            ===================== */
+
+            if (
+                images.length > 1
+            ) {
+
+
+                const imgs =
+                    card.querySelectorAll(
+                        ".property-images img"
+                    );
+
+
+                const prev =
+                    card.querySelector(
+                        ".prev"
+                    );
+
+
+                const next =
+                    card.querySelector(
+                        ".next"
+                    );
+
+
+                let current = 0;
+
+
+                function showImage(
+                    index
+                ) {
+
+
+                    imgs.forEach(
+                        function(
+                            img,
+                            i
+                        ) {
+
+
+                            img.classList.toggle(
+
+                                "active",
+
+                                i === index
+
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                next.addEventListener(
+                    "click",
+                    function() {
+
+
+                        current++;
+
+
+                        if (
+                            current >=
+                            imgs.length
+                        ) {
+
+                            current = 0;
+
+                        }
+
+
+                        showImage(
+                            current
+                        );
+
+                    }
+                );
+
+
+                prev.addEventListener(
+                    "click",
+                    function() {
+
+
+                        current--;
+
+
+                        if (
+                            current < 0
+                        ) {
+
+                            current =
+                                imgs.length - 1;
+
+                        }
+
+
+                        showImage(
+                            current
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
 }
+
+
+/* =========================
+   START
+========================= */
+
 loadProperties();
+
+
 </script>
+
+
 </body>
+
 </html>

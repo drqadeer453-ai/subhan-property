@@ -4,6 +4,7 @@
 
 body {
     margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
     background: #f5f7fa;
     color: #222;
@@ -126,8 +127,170 @@ footer {
     text-align: center;
     padding: 20px;
 }
-}body {
-    margin: 0;
-    padding: 0;
+
+
+/* =========================
+   ADMIN DASHBOARD
+========================= */
+
+.dashboard {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
 }
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.admin-properties {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.admin-property-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow: visible !important;
+}
+
+.admin-property-card img {
+    max-width: 100%;
+}
+
+.action-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    min-height: 44px;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.sold-btn {
+    background: #d62828 !important;
+    color: white !important;
+}
+
+.available-btn {
+    background: #16803c !important;
+    color: white !important;
+}
+
+.edit-btn {
+    background: #1769aa !important;
+    color: white !important;
+}
+
+.delete-btn {
+    background: #555 !important;
+    color: white !important;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.available {
+    background: #dff6e5;
+    color: #16803c;
+}
+
+.sold {
+    background: #ffe0e0;
+    color: #d62828;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    nav {
+        padding: 12px 5px;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 5px 6px;
+        font-size: 14px;
+    }
+
+    .dashboard {
+        padding: 20px 12px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-properties {
+        padding: 15px;
+    }
+
+    .admin-property-card {
+        width: 100%;
+        padding: 15px;
+        overflow: visible !important;
+    }
+
+    .admin-property-card > div:last-child {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
+        overflow: visible !important;
+    }
+
+    .admin-property-card .action-btn {
+        display: block !important;
+        width: 100% !important;
+        min-height: 46px !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
 }
