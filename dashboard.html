@@ -13,10 +13,6 @@
 
 <style>
 
-/* =========================
-   STATUS BADGES
-========================= */
-
 .status-badge {
     display: inline-block;
     padding: 6px 12px;
@@ -35,11 +31,6 @@
     background: #ffe0e0;
     color: #d62828;
 }
-
-
-/* =========================
-   ACTION BUTTONS
-========================= */
 
 .sold-btn {
     background: #d62828;
@@ -68,30 +59,17 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
-
     position: relative;
     z-index: 10;
-
     min-height: 44px;
 }
-
-
-/* =========================
-   ADMIN PROPERTY CARD
-========================= */
 
 .admin-property-card {
     overflow: visible !important;
 }
-
-
-/* =========================
-   ACTION AREA
-========================= */
 
 .admin-property-card > div:last-child {
     display: flex !important;
@@ -99,6 +77,58 @@
     gap: 10px !important;
     width: 100% !important;
     overflow: visible !important;
+}
+
+
+/* =========================
+   WHATSAPP SETTINGS
+========================= */
+
+.whatsapp-settings {
+    background: white;
+    padding: 25px;
+    margin: 25px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+}
+
+.whatsapp-settings h2 {
+    color: #123b63;
+    margin-top: 0;
+}
+
+.whatsapp-settings p {
+    color: #555;
+}
+
+.whatsapp-input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    margin: 10px 0 12px;
+    box-sizing: border-box;
+}
+
+.whatsapp-save-btn {
+    background: #16803c;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.whatsapp-save-btn:hover {
+    opacity: 0.9;
+}
+
+.whatsapp-message {
+    margin-top: 12px;
+    font-weight: bold;
 }
 
 
@@ -118,12 +148,9 @@
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-
         width: 100% !important;
         min-width: 0 !important;
-
         padding: 12px 14px !important;
-
         font-size: 14px !important;
     }
 
@@ -134,15 +161,6 @@
         gap: 10px !important;
         width: 100% !important;
     }
-
-}
-
-
-/* =========================
-   PROPERTY IMAGE MOBILE
-========================= */
-
-@media (max-width: 600px) {
 
     .admin-property-card img {
         max-width: 100% !important;
@@ -265,6 +283,49 @@
     </div>
 
 
+    <!-- =========================
+         WHATSAPP CHANNEL
+    ========================= -->
+
+    <section class="whatsapp-settings">
+
+        <h2>
+            📱 WhatsApp Channel
+        </h2>
+
+        <p>
+            یہاں WhatsApp Channel کا link ڈالیں۔
+            User website پر اسی link سے channel join کرے گا۔
+        </p>
+
+
+        <input
+            type="url"
+            id="whatsappChannelInput"
+            class="whatsapp-input"
+            placeholder="https://whatsapp.com/channel/..."
+        >
+
+
+        <button
+            type="button"
+            id="saveWhatsappButton"
+            class="whatsapp-save-btn"
+        >
+
+            💾 Save WhatsApp Channel
+
+        </button>
+
+
+        <div
+            id="whatsappMessage"
+            class="whatsapp-message"
+        ></div>
+
+    </section>
+
+
 
     <section class="admin-properties">
 
@@ -317,6 +378,186 @@ const propertyCount =
     document.getElementById("propertyCount");
 
 
+/* =========================
+   WHATSAPP ELEMENTS
+========================= */
+
+const whatsappInput =
+    document.getElementById("whatsappChannelInput");
+
+
+const saveWhatsappButton =
+    document.getElementById("saveWhatsappButton");
+
+
+const whatsappMessage =
+    document.getElementById("whatsappMessage");
+
+
+const DEFAULT_WHATSAPP =
+    "https://whatsapp.com/channel/0029VbDI5Ca6hENmz5GfXP0b";
+
+
+/* =========================
+   LOAD WHATSAPP LINK
+========================= */
+
+async function loadWhatsappChannel() {
+
+    const {
+        data,
+        error
+    } = await supabase
+
+        .from("site_settings")
+
+        .select("id, whatsapp_channel")
+
+        .eq("id", 1)
+
+        .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "WhatsApp load error:",
+            error
+        );
+
+        whatsappInput.value =
+            DEFAULT_WHATSAPP;
+
+        return;
+
+    }
+
+
+    if (data && data.whatsapp_channel) {
+
+        whatsappInput.value =
+            data.whatsapp_channel;
+
+    }
+
+    else {
+
+        whatsappInput.value =
+            DEFAULT_WHATSAPP;
+
+    }
+
+}
+
+
+/* =========================
+   SAVE WHATSAPP LINK
+========================= */
+
+saveWhatsappButton.addEventListener(
+    "click",
+    async function() {
+
+
+        const link =
+            whatsappInput.value.trim();
+
+
+        if (!link) {
+
+            whatsappMessage.textContent =
+                "❌ Please enter WhatsApp Channel link.";
+
+            whatsappMessage.style.color =
+                "#d62828";
+
+            return;
+
+        }
+
+
+        if (
+            !link.startsWith(
+                "https://whatsapp.com/channel/"
+            )
+        ) {
+
+            whatsappMessage.textContent =
+                "❌ Please enter a valid WhatsApp Channel link.";
+
+            whatsappMessage.style.color =
+                "#d62828";
+
+            return;
+
+        }
+
+
+        saveWhatsappButton.disabled =
+            true;
+
+        saveWhatsappButton.textContent =
+            "Saving...";
+
+
+        const {
+            data,
+            error
+        } = await supabase
+
+            .from("site_settings")
+
+            .update({
+                whatsapp_channel: link
+            })
+
+            .eq("id", 1)
+
+            .select();
+
+
+        if (error) {
+
+            console.error(
+                "WhatsApp save error:",
+                error
+            );
+
+            whatsappMessage.textContent =
+                "❌ Save failed: " +
+                error.message;
+
+            whatsappMessage.style.color =
+                "#d62828";
+
+            saveWhatsappButton.disabled =
+                false;
+
+            saveWhatsappButton.textContent =
+                "💾 Save WhatsApp Channel";
+
+            return;
+
+        }
+
+
+        whatsappMessage.textContent =
+            "✅ WhatsApp Channel link saved successfully!";
+
+        whatsappMessage.style.color =
+            "#16803c";
+
+
+        saveWhatsappButton.disabled =
+            false;
+
+        saveWhatsappButton.textContent =
+            "💾 Save WhatsApp Channel";
+
+
+    }
+);
+
 
 /* =========================
    GET PROPERTY DETAILS
@@ -358,7 +599,6 @@ function getPropertyDetails(property) {
 }
 
 
-
 /* =========================
    LOAD PROPERTIES
 ========================= */
@@ -369,8 +609,11 @@ async function loadProperties() {
         data,
         error
     } = await supabase
+
         .from("properties")
+
         .select("*")
+
         .order(
             "created_at",
             {
@@ -450,11 +693,6 @@ async function loadProperties() {
             "admin-property-card";
 
 
-
-        /* =========================
-           STATUS
-        ========================= */
-
         const status =
             property.status || "available";
 
@@ -470,36 +708,19 @@ async function loadProperties() {
             ?
 
             `
-
-                <span
-                    class="status-badge sold"
-                >
-
+                <span class="status-badge sold">
                     🔴 SOLD
-
                 </span>
-
             `
 
             :
 
             `
-
-                <span
-                    class="status-badge available"
-                >
-
+                <span class="status-badge available">
                     🟢 AVAILABLE
-
                 </span>
-
             `;
 
-
-
-        /* =========================
-           IMAGE
-        ========================= */
 
         const imageHTML =
 
@@ -508,13 +729,9 @@ async function loadProperties() {
             ?
 
             `
-
                 <img
-
                     src="${details.image}"
-
                     alt="Property"
-
                     style="
                         width:180px;
                         height:120px;
@@ -523,20 +740,13 @@ async function loadProperties() {
                         margin-bottom:10px;
                         max-width:100%;
                     "
-
                 >
-
             `
 
             :
 
             "";
 
-
-
-        /* =========================
-           STATUS BUTTON
-        ========================= */
 
         const statusButton =
 
@@ -545,54 +755,27 @@ async function loadProperties() {
             ?
 
             `
-
                 <button
-
-                    class="
-                        action-btn
-                        available-btn
-                    "
-
+                    class="action-btn available-btn"
                     data-id="${property.id}"
-
                     type="button"
-
                 >
-
                     🟢 Mark Available
-
                 </button>
-
             `
 
             :
 
             `
-
                 <button
-
-                    class="
-                        action-btn
-                        sold-btn
-                    "
-
+                    class="action-btn sold-btn"
                     data-id="${property.id}"
-
                     type="button"
-
                 >
-
                     🔴 Mark as Sold
-
                 </button>
-
             `;
 
-
-
-        /* =========================
-           CARD
-        ========================= */
 
         card.innerHTML = `
 
@@ -602,11 +785,7 @@ async function loadProperties() {
             <div>
 
                 <h3>
-
-                    ${
-                        property.title || ""
-                    }
-
+                    ${property.title || ""}
                 </h3>
 
 
@@ -614,49 +793,28 @@ async function loadProperties() {
 
 
                 <p>
-
-                    📍
-                    ${
-                        property.location || ""
-                    }
-
+                    📍 ${property.location || ""}
                 </p>
 
 
                 <p>
-
-                    📐
-                    ${
-                        property.size || ""
-                    }
-
+                    📐 ${property.size || ""}
                 </p>
 
 
                 <p>
-
-                    💰
-                    ${
-                        property.price || ""
-                    }
-
+                    💰 ${property.price || ""}
                 </p>
 
 
                 <p>
-
-                    ${
-                        details.description || ""
-                    }
-
+                    ${details.description || ""}
                 </p>
 
             </div>
 
 
-
             <div
-
                 style="
                     display:flex;
                     gap:10px;
@@ -665,62 +823,35 @@ async function loadProperties() {
                     width:100%;
                     overflow:visible;
                 "
-
             >
 
                 ${statusButton}
 
 
                 <button
-
-                    class="
-                        action-btn
-                        edit-btn
-                    "
-
+                    class="action-btn edit-btn"
                     data-id="${property.id}"
-
                     type="button"
-
                 >
-
                     ✏️ Edit
-
                 </button>
-
 
 
                 <button
-
-                    class="
-                        action-btn
-                        delete-btn
-                    "
-
+                    class="action-btn delete-btn"
                     data-id="${property.id}"
-
                     type="button"
-
                 >
-
                     🗑️ Delete
-
                 </button>
-
 
             </div>
 
         `;
 
 
-
         propertyList.appendChild(card);
 
-
-
-        /* =========================
-           SOLD / AVAILABLE BUTTON
-        ========================= */
 
         const statusBtn =
             card.querySelector(
@@ -744,11 +875,6 @@ async function loadProperties() {
 
         }
 
-
-
-        /* =========================
-           EDIT BUTTON
-        ========================= */
 
         const editButton =
             card.querySelector(".edit-btn");
@@ -785,11 +911,6 @@ async function loadProperties() {
         }
 
 
-
-        /* =========================
-           DELETE BUTTON
-        ========================= */
-
         const deleteButton =
             card.querySelector(".delete-btn");
 
@@ -813,7 +934,6 @@ async function loadProperties() {
     });
 
 }
-
 
 
 /* =========================
@@ -860,10 +980,13 @@ async function toggleStatus(
     const {
         error
     } = await supabase
+
         .from("properties")
+
         .update({
             status: newStatus
         })
+
         .eq(
             "id",
             id
@@ -887,9 +1010,13 @@ async function toggleStatus(
     alert(
 
         currentlySold
+
         ?
+
         "🟢 Property Available kar di gayi!"
+
         :
+
         "🔴 Property SOLD mark kar di gayi!"
 
     );
@@ -898,7 +1025,6 @@ async function toggleStatus(
     loadProperties();
 
 }
-
 
 
 /* =========================
@@ -934,8 +1060,11 @@ async function deleteProperty(id) {
     const {
         error
     } = await supabase
+
         .from("properties")
+
         .delete()
+
         .eq(
             "id",
             id
@@ -966,10 +1095,11 @@ async function deleteProperty(id) {
 }
 
 
-
 /* =========================
    START
 ========================= */
+
+loadWhatsappChannel();
 
 loadProperties();
 
